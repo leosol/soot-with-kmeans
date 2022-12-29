@@ -1,0 +1,55 @@
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+plugins {
+    id 'java'
+
+    id 'application'
+}
+
+apply plugin: 'jacoco'
+
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'net.sf.trove4j:trove4j:3.0.3'
+    compile fileTree(dir: 'lib', include: '*.jar')
+
+    implementation 'org.soot-oss:soot:4.2.1'
+    implementation ('org.slf4j:slf4j-nop:1.7.5')
+    implementation 'org.graphstream:gs-core:1.3'
+    implementation 'org.graphstream:gs-ui:1.3'
+    implementation('log4j:log4j:1.2.15') {
+        exclude group: 'javax.jms', module: 'jms'
+        exclude group: 'com.sun.jdmk', module: 'jmxtools'
+        exclude group: 'com.sun.jmx', module: 'jmxri'
+    }
+    
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    
+    implementation 'org.apache.commons:commons-csv:1.9.0'
+    
+    testImplementation 'junit:junit:4.12'
+}
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+mainClassName = 'com.leosol.sootkmeans.Main'
