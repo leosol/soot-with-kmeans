@@ -15,7 +15,7 @@ Not all of them could be analysed with soot framework, since there were many out
 
 The final list had **57 apps**, each with a reference to the Android instruction that referenced LOCATION api. 
 
-The following topics show the results that we found. Notice that, no matter how complex the Android App is, most of them expects that the users LOCATION information is provided as soon as possible. The next topics shows some of the information that was extracted which was obtained with the help of the soot framework.
+The following topics show the results that we found. _Notice that, no matter how complex the Android App is, most of them expects that the users LOCATION information is provided as soon as possible_. The next topics shows some of the information that was extracted which was obtained with the help of the soot framework.
 
 | Package Name                      | Package Name                      | Package Name                      | Package Name                         | Package Name                       | Package Name                            | Package Name                        | Package Name                                  |
 |-----------------------------------|-----------------------------------|-----------------------------------|--------------------------------------|------------------------------------|-----------------------------------------|-------------------------------------|-----------------------------------------------|
@@ -37,3 +37,34 @@ The following topics show the results that we found. Notice that, no matter how 
 | com.android.chrome                | com.google.android.gm             | com.miui.hybrid                   | deezer.android.app                   | com.facebook.katana                | com.lemon.lvoverseas                    | com.shopee.br                       | cn.wps.xiaomi.abroad.lite                     |
 | com.android.deskclock             | com.google.android.gms            | com.miui.miservice                | homeworkout.homeworkouts.noequipment | com.facebook.orca                  | com.linkedin.android                    | com.snapchat.android                | com.duokan.phone.remotecontroller             |
 | com.facebook.services             | com.luizalabs.mlapp               | com.snowcorp.stickerly.android    |                                      |                                    |                                         |                                     |                                               |
+
+## SOOT
+Soot framework is very powerfull. It was configured to search for references to ```android.location.LocationManager```, ```requestLocationUpdates```, ```gms.location.LocationRequest```, ```requestSingleUpdate``` and ```getLastKnownLocation```. As a result we could sometimes relate this method with some constant argument. Other times, we found that the argument was passed on in Variables (arguments that were not constants). The following picture shows some of the extracted data, with the argument that we could capture. The full database is available at [here](example-analysis/example-analysis.db).
+
+![Basic Idea](example-analysis/images/Figure_6.png)
+
+The following code shows the references to the LOCATION api were captured with the help of the cless UsageSearchSpec, created with this pourpouse. And the next picture shows some jimple extracted from the invocation point.
+
+```java
+public static UsageSearchSpec createSpec() {
+		String methodSignature = "void requestLocationUpdates(java.lang.String,long,float,android.app.PendingIntent)";
+		String classSignature = "android.location.LocationManager";
+		return new UsageSearchSpec(methodSignature, classSignature, 1, 2);
+}
+```
+
+![Basic Idea](example-analysis/images/Figure_5.png)
+
+### Results
+The next image shows a Scatter Grapth with Y Axis having an estimate of how often the app expects LOCATION information and with on the X Axis the number of all permissions that the app requests in it's manifest. You can see that most of the apps, when it calls LOCATION API, it seems that it expects to have users location as soon as possible. We think that not all users are aware of this and it seems that it might be the case that, most of the time, there might be some app requesting information about the user's location. By the way, this is just a feeling, since we didn't go deeper studing when the invocation point was called. We focused mainly on the parameters.
+
+![Basic Idea](example-analysis/images/Figure_4.png)
+
+
+### K-means and Machine Learning
+We implemented k-means clustering algorithm by ourselves. The following picture shows data with and without clustering that is made available by using the same colors for the same clusters.
+
+![Basic Idea](example-analysis/images/Figure_1.png)
+
+![Basic Idea](example-analysis/images/Figure_2.png)
+
