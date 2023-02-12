@@ -127,7 +127,7 @@ class CSVToSQLite:
                 inner join 
                 (	SELECT
                         APKPackage,
-                        count(*) as qtd_loc_permissions
+                        count(distinct(Permission)) as qtd_loc_permissions
                     from apk_permissions_csv 
                     group by 1) as b
                 on (a.APKPackage = b.APKPackage)

@@ -148,7 +148,7 @@ class KMeansClustering:
 
     def scatter_plot_with_clusters(self, labels, title, xLabel, yLabel):
         positions = [self.calculate_example_centroid(self.data[i]) for i in range(0, len(self.data))]
-        color = iter(cm.rainbow(np.linspace(0, 1, 5)))
+        color = iter(cm.rainbow(np.linspace(0, 1, 7)))
         next(color)
         fig, ax = plt.subplots()
         cluster_colors = []
@@ -178,10 +178,11 @@ class KMeansClustering:
             if self.adjust_text:
                 adjust_text(texts, precision=0.8, only_move={'objects': 'xy', 'points': 'xy', 'text': 'xy'},
                             arrowprops=dict(arrowstyle="->", color='r', lw=0.5))
-        plt.legend(ncol=3, handles=legend_handles)
         plt.title(title)
         plt.xlabel(xLabel)
         plt.ylabel(yLabel)
+        #plt.show()
+        plt.legend(ncol=3, handles=legend_handles)
         plt.show()
 
 
@@ -202,7 +203,7 @@ def vw_expected_time_vs_permissions():
         pos = pos + 1
     print(data)
     cursor.close()
-    kmc = KMeansClustering(4, 100, data, [0, 1])
+    kmc = KMeansClustering(6, 100, data, [0, 1])
     kmc.adjust_text = True
     # kmc.set_clusters([0, 3, 6])
     kmc.create_clusters()
